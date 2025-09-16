@@ -19,21 +19,27 @@ export function TypingAnimation({
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
-    const startTimer = setTimeout(() => {
-      if (currentIndex < text.length) {
-        const timer = setTimeout(() => {
-          setDisplayText(prev => prev + text[currentIndex]);
-          setCurrentIndex(prev => prev + 1);
-        }, speed);
+    if (!started) {
+      const startTimer = setTimeout(() => {
+        setStarted(true);
+      }, startDelay);
+      return () => clearTimeout(startTimer);
+    }
+  }, [started, startDelay]);
 
-        return () => clearTimeout(timer);
-      }
-    }, startDelay);
+  useEffect(() => {
+    if (started && currentIndex < text.length) {
+      const timer = setTimeout(() => {
+        setDisplayText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, speed);
 
-    return () => clearTimeout(startTimer);
-  }, [currentIndex, text, speed, startDelay]);
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, text, speed, started]);
 
   useEffect(() => {
     const cursorTimer = setInterval(() => {

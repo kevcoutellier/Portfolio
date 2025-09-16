@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Sparkles, Brain, Cpu, ArrowRight, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { EnhancedButton } from "@/components/ui/enhanced-button";
+import { TypingAnimation } from "@/components/TypingAnimation";
 
 function AIShape({
   className,
@@ -79,12 +80,6 @@ function AIShape({
       </motion.div>
     </motion.div>
   );
-                        <IconComponent className="w-6 h-6 text-blue-400/60" />
-                    </div>
-                )}
-            </motion.div>
-        </motion.div>
-    );
 }
 
 function HeroGeometricAI() {
@@ -100,13 +95,13 @@ function HeroGeometricAI() {
             y: 0,
             transition: {
                 duration: 1,
-                ease: "easeInOut",
+                ease: [0.4, 0, 0.2, 1] as const,
             },
         },
     };
 
     return (
-        <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-muted/20 dark:bg-gradient-to-br dark:from-[#030303] dark:via-[#030303] dark:to-[#0a0a0a]">
+        <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-muted/20 dark:bg-gradient-to-br dark:from-[#030303] dark:via-[#030303] dark:to-[#0a0a0a] pt-16">
             {/* Gradient overlay adaptatif */}
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.03] via-transparent to-purple-500/[0.03] dark:from-blue-500/[0.05] dark:via-transparent dark:to-purple-500/[0.05] blur-3xl" />
 
@@ -173,7 +168,7 @@ function HeroGeometricAI() {
                     >
                         <Sparkles className="h-4 w-4 text-blue-500 dark:text-blue-400" />
                         <span className="text-sm font-medium text-blue-600 dark:text-blue-400 tracking-wide">
-                            Développeur Full-Stack & AI Engineer
+                            Développeur Full-Stack & Scrum Master
                         </span>
                     </motion.div>
 
@@ -186,12 +181,15 @@ function HeroGeometricAI() {
                     >
                         <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 md:mb-8 tracking-tight leading-tight">
                             <span className="bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/80">
-                                Créateur d&apos;
+                                Créateur de
                             </span>
                             <br />
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600">
-                                Intelligence Artificielle
-                            </span>
+                            <TypingAnimation
+                                text="Solutions Innovantes"
+                                startDelay={1500}
+                                speed={65}
+                                className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"
+                            />
                         </h1>
                     </motion.div>
 
@@ -203,8 +201,8 @@ function HeroGeometricAI() {
                         transition={{ delay: 0.9 }}
                     >
                         <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-8 md:mb-12 leading-relaxed font-light tracking-wide max-w-2xl mx-auto px-4">
-                            Je transforme vos idées en solutions intelligentes avec des applications web modernes, 
-                            des systèmes d&apos;IA personnalisés et des automatisations révolutionnaires.
+                            Je transforme vos idées en applications web performantes, optimise vos processus agiles 
+                            et développe des solutions durables pour votre entreprise.
                         </p>
                     </motion.div>
 
@@ -239,49 +237,11 @@ function HeroGeometricAI() {
                             Demander un devis
                         </EnhancedButton>
                     </motion.div>
-
-                    {/* Stats */}
-                    <motion.div
-                        variants={fadeUpVariants}
-                        initial="hidden"
-                        animate="visible"
-                        transition={{ delay: 1.3 }}
-                        className="grid grid-cols-3 gap-6 pt-12 md:pt-16 max-w-md mx-auto"
-                    >
-                        <div className="text-center">
-                            <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">50+</div>
-                            <div className="text-sm text-muted-foreground">Projets IA</div>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">98%</div>
-                            <div className="text-sm text-muted-foreground">Satisfaction</div>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">24h</div>
-                            <div className="text-sm text-muted-foreground">Support</div>
-                        </div>
-                    </motion.div>
                 </div>
             </div>
 
             {/* Gradient overlay de fin */}
             <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/80 dark:from-[#030303] dark:via-transparent dark:to-[#030303]/80 pointer-events-none" />
-            
-            {/* Indicateur de scroll */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 2 }}
-                className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-            >
-                <motion.div
-                    animate={{ y: [0, 10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="w-6 h-10 border border-muted-foreground/30 rounded-full flex justify-center"
-                >
-                    <div className="w-1 h-3 bg-gradient-to-b from-blue-600 to-purple-600 rounded-full mt-2" />
-                </motion.div>
-            </motion.div>
         </div>
     );
 }

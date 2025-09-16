@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Check, Calculator, Download, Send } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calculator, Download, Send } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -182,6 +183,16 @@ export function QuoteForm() {
     return Math.round((basePrice + featuresPrice) * urgencyMultiplier);
   };
 
+  const calculatePriceWithTax = () => {
+    const priceHT = calculatePrice();
+    const tva = Math.round(priceHT * 0.20); // TVA 20%
+    return {
+      priceHT,
+      tva,
+      priceTTC: priceHT + tva
+    };
+  };
+
   const nextStep = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
@@ -203,10 +214,387 @@ export function QuoteForm() {
     }));
   };
 
-  const handleSubmit = () => {
-    // Ici on pourrait envoyer les données à un API
-    console.log('Quote submitted:', formData);
-    alert(`Devis envoyé ! Prix estimé: ${calculatePrice()}€`);
+  const generatePDF = async (saveToFile = true) => {
+    const jsPDF = (await import('jspdf')).default;
+    const pdf = new jsPDF();
+    const priceWithTax = calculatePriceWithTax();
+    const selectedProject = projectTypes.find(p => p.id === formData.projectType);
+    
+    let currentPage = 1;
+    const pageHeight = 297; // A4 height in mm
+    const marginTop = 30;
+    const marginBottom = 25;
+    const marginLeft = 20;
+    const marginRight = 20;
+    const contentHeight = pageHeight - marginTop - marginBottom;
+    
+    // Fonction pour ajouter en-tête et pied de page
+    const addHeaderFooter = (pageNum: number) => {
+      // En-tête
+      pdf.setFillColor(240, 240, 240);
+      pdf.rect(0, 0, 210, marginTop - 5, 'F');
+      
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(50, 50, 50);
+      pdf.text('DEVIS DÉTAILLÉ', marginLeft, 15);
+      
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setTextColor(100, 100, 100);
+      pdf.text(`N° ${Date.now().toString().slice(-6)}`, 210 - marginRight, 15, { align: 'right' });
+      pdf.text(`Date: ${new Date().toLocaleDateString('fr-FR')}`, 210 - marginRight, 22, { align: 'right' });
+      
+      // Ligne de séparation
+      pdf.setDrawColor(200, 200, 200);
+      pdf.line(marginLeft, marginTop - 8, 210 - marginRight, marginTop - 8);
+      
+      // Pied de page
+      pdf.setFillColor(50, 50, 50);
+      pdf.rect(0, pageHeight - marginBottom + 5, 210, marginBottom - 5, 'F');
+      
+      pdf.setFontSize(9);
+      pdf.setTextColor(255, 255, 255);
+      pdf.text('Kevin COUTELLIER', marginLeft, pageHeight - 15);
+      pdf.text('Développeur Full-Stack & Scrum Master', marginLeft, pageHeight - 10);
+      pdf.text('kev.coutellier@gmail.com', marginLeft, pageHeight - 5);
+      
+      pdf.text('07 88 44 02 32', 210 - marginRight, pageHeight - 15, { align: 'right' });
+      pdf.text('Antibes, France', 210 - marginRight, pageHeight - 10, { align: 'right' });
+      pdf.text(`Page ${pageNum}`, 210 - marginRight, pageHeight - 5, { align: 'right' });
+      
+      // Reset text color
+      pdf.setTextColor(0, 0, 0);
+    };
+    
+    // Fonction pour vérifier et ajouter une nouvelle page si nécessaire
+    const checkPageBreak = (yPos: number, requiredSpace: number) => {
+      if (yPos + requiredSpace > contentHeight + marginTop) {
+        pdf.addPage();
+        currentPage++;
+        addHeaderFooter(currentPage);
+        return marginTop + 10;
+      }
+      return yPos;
+    };
+    
+    // PAGE 1
+    addHeaderFooter(currentPage);
+    let yPos = marginTop + 15;
+    
+    // Section Client
+    pdf.setFontSize(14);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(0, 100, 200);
+    pdf.text('INFORMATIONS CLIENT', marginLeft, yPos);
+    
+    pdf.setDrawColor(0, 100, 200);
+    pdf.line(marginLeft, yPos + 2, 100, yPos + 2);
+    
+    yPos += 10;
+    pdf.setFontSize(11);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(0, 0, 0);
+    
+    pdf.text(`Nom: ${formData.contact.name}`, marginLeft + 5, yPos);
+    yPos += 6;
+    
+    if (formData.contact.company) {
+      pdf.text(`Entreprise: ${formData.contact.company}`, marginLeft + 5, yPos);
+      yPos += 6;
+    }
+    
+    pdf.text(`Email: ${formData.contact.email}`, marginLeft + 5, yPos);
+    yPos += 15;
+    
+    // Section Projet
+    yPos = checkPageBreak(yPos, 50);
+    
+    pdf.setFontSize(14);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(0, 100, 200);
+    pdf.text('DÉTAILS DU PROJET', marginLeft, yPos);
+    
+    pdf.setDrawColor(0, 100, 200);
+    pdf.line(marginLeft, yPos + 2, 110, yPos + 2);
+    
+    yPos += 10;
+    pdf.setFontSize(11);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(0, 0, 0);
+    
+    if (selectedProject) {
+      pdf.text(`Type de projet: ${selectedProject.name}`, marginLeft + 5, yPos);
+      yPos += 6;
+      pdf.text(`Description: ${selectedProject.description}`, marginLeft + 5, yPos);
+      yPos += 6;
+      pdf.text(`Prix de base: ${selectedProject.basePrice}€ HT`, marginLeft + 5, yPos);
+      yPos += 10;
+    }
+    
+    // Fonctionnalités additionnelles
+    if (formData.features.length > 0) {
+      yPos = checkPageBreak(yPos, 30 + formData.features.length * 6);
+      
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Fonctionnalités additionnelles:', marginLeft + 5, yPos);
+      yPos += 8;
+      
+      pdf.setFont('helvetica', 'normal');
+      formData.features.forEach(featureId => {
+        const feature = features.find(f => f.id === featureId);
+        if (feature) {
+          pdf.text(`• ${feature.name}`, marginLeft + 10, yPos);
+          pdf.text(`+${feature.price}€ HT`, 150, yPos);
+          yPos += 6;
+        }
+      });
+      yPos += 5;
+    }
+    
+    // Délais et urgence
+    yPos = checkPageBreak(yPos, 25);
+    
+    const urgency = urgencyMultipliers[formData.urgency as keyof typeof urgencyMultipliers];
+    if (urgency) {
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Délais souhaités:', marginLeft + 5, yPos);
+      yPos += 6;
+      
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`${urgency.name}`, marginLeft + 10, yPos);
+      
+      if (urgency.multiplier !== 1) {
+        const coefficient = urgency.multiplier > 1 ? 
+          `+${Math.round((urgency.multiplier - 1) * 100)}%` : 
+          `-${Math.round((1 - urgency.multiplier) * 100)}%`;
+        pdf.text(`(${coefficient})`, 100, yPos);
+      }
+      yPos += 10;
+    }
+    
+    // Budget et contraintes
+    if (formData.budget || formData.timeline) {
+      yPos = checkPageBreak(yPos, 30);
+      
+      if (formData.budget) {
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Budget indicatif:', marginLeft + 5, yPos);
+        yPos += 6;
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(formData.budget, marginLeft + 10, yPos);
+        yPos += 8;
+      }
+      
+      if (formData.timeline) {
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Contraintes particulières:', marginLeft + 5, yPos);
+        yPos += 6;
+        pdf.setFont('helvetica', 'normal');
+        const lines = pdf.splitTextToSize(formData.timeline, 160);
+        pdf.text(lines, marginLeft + 10, yPos);
+        yPos += lines.length * 5 + 10;
+      }
+    }
+    
+    // Récapitulatif financier
+    yPos = checkPageBreak(yPos, 80);
+    
+    pdf.setFontSize(14);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(200, 50, 50);
+    pdf.text('RÉCAPITULATIF FINANCIER', marginLeft, yPos);
+    
+    pdf.setDrawColor(200, 50, 50);
+    pdf.line(marginLeft, yPos + 2, 130, yPos + 2);
+    
+    yPos += 15;
+    
+    // Tableau récapitulatif
+    pdf.setFillColor(250, 250, 250);
+    pdf.rect(marginLeft, yPos - 5, 170, 40, 'F');
+    pdf.setDrawColor(200, 200, 200);
+    pdf.rect(marginLeft, yPos - 5, 170, 40);
+    
+    pdf.setFontSize(11);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(0, 0, 0);
+    
+    pdf.text('DÉSIGNATION', marginLeft + 5, yPos + 5);
+    pdf.text('MONTANT', 150, yPos + 5);
+    
+    pdf.line(marginLeft, yPos + 7, marginLeft + 170, yPos + 7);
+    
+    yPos += 12;
+    pdf.text(`Total HT`, marginLeft + 5, yPos);
+    pdf.text(`${priceWithTax.priceHT}€`, 150, yPos);
+    
+    yPos += 6;
+    pdf.text(`TVA (20%)`, marginLeft + 5, yPos);
+    pdf.text(`${priceWithTax.tva}€`, 150, yPos);
+    
+    yPos += 6;
+    pdf.line(marginLeft + 120, yPos - 2, marginLeft + 170, yPos - 2);
+    
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(12);
+    pdf.text(`TOTAL TTC`, marginLeft + 5, yPos + 3);
+    pdf.text(`${priceWithTax.priceTTC}€`, 150, yPos + 3);
+    
+    // Message additionnel si présent
+    if (formData.contact.message) {
+      yPos += 20;
+      yPos = checkPageBreak(yPos, 30);
+      
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(0, 100, 200);
+      pdf.text('MESSAGE CLIENT', marginLeft, yPos);
+      
+      yPos += 8;
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setTextColor(0, 0, 0);
+      const messageLines = pdf.splitTextToSize(formData.contact.message, 170);
+      pdf.text(messageLines, marginLeft + 5, yPos);
+    }
+    
+    // Retourner le PDF ou le télécharger
+    if (saveToFile) {
+      pdf.save(`devis-${formData.contact.name.replace(/\s+/g, '-')}-${Date.now()}.pdf`);
+    } else {
+      return {
+        blob: pdf.output('blob'),
+        filename: `devis-${formData.contact.name.replace(/\s+/g, '-')}-${Date.now()}.pdf`
+      };
+    }
+  };
+
+  const sendEmailWithPDF = async () => {
+    try {
+      console.log('🔧 Début génération PDF...');
+      
+      // Générer le PDF en blob
+      const pdfData = await generatePDF(false);
+      if (!pdfData) throw new Error('Impossible de générer le PDF');
+      
+      console.log('✅ PDF généré:', pdfData.filename, 'Taille:', pdfData.blob.size, 'bytes');
+
+      const priceWithTax = calculatePriceWithTax();
+      const selectedProject = projectTypes.find(p => p.id === formData.projectType);
+
+      // Convertir le blob en base64 pour EmailJS
+      const reader = new FileReader();
+      reader.readAsDataURL(pdfData.blob);
+      
+      return new Promise((resolve, reject) => {
+        reader.onload = async () => {
+          try {
+            console.log('🔧 Conversion en base64...');
+            const base64Data = (reader.result as string).split(',')[1];
+            console.log('✅ Base64 généré, taille:', base64Data.length, 'caractères');
+            
+            // Configuration EmailJS
+            const serviceID = 'service_wgy3ueg';
+            const templateID = 'template_sgpdgu6';
+            const publicKey = 'y0xJe_AwSWPlLDLgh';
+
+            // Initialiser EmailJS avec la clé publique
+            console.log('🔧 Initialisation EmailJS...');
+            emailjs.init(publicKey);
+            console.log('✅ EmailJS initialisé');
+            
+            const templateParams = {
+              to_email: formData.contact.email,
+              client_name: formData.contact.name,
+              client_company: formData.contact.company || '',
+              project_type: selectedProject?.name || '',
+              total_price: priceWithTax.priceTTC,
+              client_message: formData.contact.message || '',
+              // Format simple pour les pièces jointes
+              attachment_name: pdfData.filename,
+              attachment_data: base64Data
+            };
+
+            console.log('📧 Paramètres email:', {
+              to: templateParams.to_email,
+              client: templateParams.client_name,
+              project: templateParams.project_type,
+              price: templateParams.total_price,
+              attachment_size: base64Data.length
+            });
+
+            console.log('🚀 Envoi via EmailJS...');
+            const response = await emailjs.send(serviceID, templateID, templateParams);
+            console.log('✅ EmailJS réponse complète:', response);
+            
+            if (response.status === 200 || response.text === 'OK') {
+              console.log('🎉 Email envoyé avec succès !');
+              resolve(true);
+            } else {
+              const errorMsg = `EmailJS erreur: status=${response.status}, text=${response.text}`;
+              console.error('❌', errorMsg);
+              reject(new Error(errorMsg));
+            }
+          } catch (error) {
+            console.error('❌ Erreur détaillée EmailJS:');
+            console.error('Type:', typeof error);
+            console.error('Message:', error instanceof Error ? error.message : 'Erreur inconnue');
+            console.error('Stack:', error instanceof Error ? error.stack : 'Pas de stack');
+            console.error('Objet complet:', error);
+            
+            let errorMessage = 'Erreur EmailJS: ';
+            if (error instanceof Error) {
+              errorMessage += error.message;
+            } else if (typeof error === 'string') {
+              errorMessage += error;
+            } else {
+              errorMessage += JSON.stringify(error) || 'Erreur inconnue';
+            }
+            
+            reject(new Error(errorMessage));
+          }
+        };
+        
+        reader.onerror = (err) => {
+          console.error('❌ Erreur lecture fichier:', err);
+          reject(new Error('Erreur lors de la lecture du PDF'));
+        };
+      });
+    } catch (error) {
+      console.error('❌ Erreur génération PDF:', error);
+      throw error;
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      console.log('Début de l\'envoi automatique...');
+      
+      // Envoyer l'email automatiquement avec PDF en pièce jointe
+      await sendEmailWithPDF();
+      
+      const priceWithTax = calculatePriceWithTax();
+      alert(`✅ Devis envoyé avec succès !\n\nUn email avec le devis PDF a été envoyé automatiquement à :\n📧 ${formData.contact.email}\n\nMontant: ${priceWithTax.priceTTC}€ TTC`);
+      
+    } catch (error) {
+      console.error('❌ Erreur détaillée lors de l\'envoi:', error);
+      
+      // Afficher l'erreur détaillée sans ouvrir Outlook
+      let errorMessage = 'Erreur lors de l\'envoi automatique du devis.\n\n';
+      
+      if (error instanceof Error) {
+        errorMessage += `Détails: ${error.message}\n\n`;
+      }
+      
+      errorMessage += 'Vérifiez :\n';
+      errorMessage += '• Votre connexion internet\n';
+      errorMessage += '• Les clés EmailJS dans la console développeur\n';
+      errorMessage += '• La configuration du template EmailJS\n\n';
+      errorMessage += 'Utilisez le bouton "PDF seul" pour télécharger le devis manuellement.';
+      
+      alert(errorMessage);
+    }
   };
 
   const renderStep = () => {
@@ -234,7 +622,11 @@ export function QuoteForm() {
                   <RadioGroupItem value={project.id} id={project.id} className="peer sr-only" />
                   <Label
                     htmlFor={project.id}
-                    className="flex items-center space-x-4 p-4 border-2 border-muted rounded-lg cursor-pointer hover:border-blue-500 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-950/20 transition-all"
+                    className={`flex items-center space-x-4 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                      formData.projectType === project.id
+                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20'
+                        : 'border-muted hover:border-blue-500'
+                    }`}
                   >
                     <div className="text-2xl">{project.icon}</div>
                     <div className="flex-1">
@@ -336,7 +728,11 @@ export function QuoteForm() {
                       <RadioGroupItem value={key} id={key} className="peer sr-only" />
                       <Label
                         htmlFor={key}
-                        className="flex items-center justify-between p-3 border-2 border-muted rounded-lg cursor-pointer hover:border-blue-500 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-950/20 transition-all"
+                        className={`flex items-center justify-between p-3 border-2 rounded-lg cursor-pointer transition-all ${
+                          formData.urgency === key
+                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20'
+                            : 'border-muted hover:border-blue-500'
+                        }`}
                       >
                         <span>{name}</span>
                         <Badge variant={multiplier > 1 ? "destructive" : multiplier < 1 ? "secondary" : "outline"}>
@@ -383,14 +779,11 @@ export function QuoteForm() {
               <div className="flex items-center justify-between mb-4">
                 <h4 className="font-semibold flex items-center">
                   <Calculator className="w-5 h-5 mr-2" />
-                  Prix estimé
+                  Devis détaillé
                 </h4>
-                <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  {calculatePrice()}€
-                </div>
               </div>
 
-              <div className="space-y-3 text-sm">
+              <div className="space-y-3 text-sm mb-4">
                 {formData.projectType && (
                   <div className="flex justify-between">
                     <span>
@@ -419,6 +812,26 @@ export function QuoteForm() {
                     </span>
                   </div>
                 )}
+              </div>
+
+              {/* Pricing with Tax */}
+              <div className="border-t border-blue-200/30 pt-4">
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>Total HT</span>
+                    <span className="font-medium">{calculatePriceWithTax().priceHT}€</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>TVA (20%)</span>
+                    <span className="font-medium">{calculatePriceWithTax().tva}€</span>
+                  </div>
+                  <div className="flex justify-between text-lg font-bold border-t border-blue-200/30 pt-2">
+                    <span>Total TTC</span>
+                    <span className="text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                      {calculatePriceWithTax().priceTTC}€
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -570,9 +983,14 @@ export function QuoteForm() {
                   </Button>
                 ) : (
                   <div className="flex space-x-2">
-                    <Button variant="outline" className="flex items-center">
+                    <Button 
+                      variant="outline" 
+                      className="flex items-center"
+                      onClick={generatePDF}
+                      disabled={!formData.contact.name || !formData.contact.email}
+                    >
                       <Download className="w-4 h-4 mr-2" />
-                      PDF
+                      PDF seul
                     </Button>
                     <Button
                       onClick={handleSubmit}
@@ -580,7 +998,7 @@ export function QuoteForm() {
                       className="flex items-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                     >
                       <Send className="w-4 h-4 mr-2" />
-                      Envoyer
+                      PDF + Email
                     </Button>
                   </div>
                 )}
