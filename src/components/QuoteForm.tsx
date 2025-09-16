@@ -986,7 +986,7 @@ export function QuoteForm() {
                     <Button 
                       variant="outline" 
                       className="flex items-center"
-                      onClick={generatePDF}
+                      onClick={() => generatePDF(true)}
                       disabled={!formData.contact.name || !formData.contact.email}
                     >
                       <Download className="w-4 h-4 mr-2" />
