@@ -3,7 +3,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Code, Zap, Users, Trophy } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { EnhancedCard, EnhancedCardContent } from '@/components/ui/enhanced-card';
 import { GlowBadge } from '@/components/ui/glow-badge';
 
@@ -15,8 +14,8 @@ const features = [
   },
   {
     icon: Zap,
-    title: 'Intelligence Artificielle',
-    description: 'Spécialisation en machine learning, deep learning, NLP et computer vision avec TensorFlow, PyTorch et OpenAI.'
+    title: 'Green IT & Durabilité',
+    description: 'Développement de solutions pour mesurer et réduire l\'impact environnemental des infrastructures IT avec Azure Cloud Services.'
   },
   {
     icon: Users,
@@ -54,7 +53,7 @@ export function AboutSection() {
             </h2>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Développeur passionné avec plus de 5 ans d&apos;expérience, je me spécialise dans la création 
-              d&apos;applications intelligentes qui transforment les défis business en opportunités.
+              d&apos;applications performantes et durables qui transforment les défis business en opportunités.
             </p>
           </motion.div>
 
@@ -75,8 +74,8 @@ export function AboutSection() {
                   je privilégie toujours l&apos;expérience utilisateur et l&apos;efficacité business dans mes développements.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  Mon expertise en intelligence artificielle me permet de créer des solutions qui apprennent 
-                  et s&apos;adaptent, offrant une valeur ajoutée considérable à vos projets.
+                  Mon expérience en Scrum Master et développement Green IT me permet de créer des solutions 
+                  agiles et durables, offrant une valeur ajoutée considérable à vos projets.
                 </p>
               </div>
 
@@ -84,28 +83,28 @@ export function AboutSection() {
                 <h3 className="text-2xl font-semibold">Processus de travail</h3>
                 <div className="space-y-3">
                   <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
+                    <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
                     <div>
                       <h4 className="font-medium">Analyse & Découverte</h4>
                       <p className="text-sm text-muted-foreground">Compréhension approfondie de vos besoins et objectifs</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">2</div>
+                    <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">2</div>
                     <div>
                       <h4 className="font-medium">Conception & Prototypage</h4>
                       <p className="text-sm text-muted-foreground">Design des interfaces et architecture technique</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">3</div>
+                    <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">3</div>
                     <div>
                       <h4 className="font-medium">Développement Itératif</h4>
                       <p className="text-sm text-muted-foreground">Livraisons fréquentes avec retours continus</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">4</div>
+                    <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">4</div>
                     <div>
                       <h4 className="font-medium">Test & Optimisation</h4>
                       <p className="text-sm text-muted-foreground">Validation complète et optimisation des performances</p>
@@ -130,9 +129,9 @@ export function AboutSection() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="text-center">
                       <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-2">
-                        <span className="text-white font-bold text-lg">AI</span>
+                        <span className="text-white font-bold text-lg">MGMT</span>
                       </div>
-                      <p className="text-sm font-medium">Intelligence Artificielle</p>
+                      <p className="text-sm font-medium">Scrum Master</p>
                     </div>
                     <div className="text-center">
                       <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-2">
@@ -142,9 +141,9 @@ export function AboutSection() {
                     </div>
                     <div className="text-center">
                       <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center mx-auto mb-2">
-                        <span className="text-white font-bold text-lg">ML</span>
+                        <span className="text-white font-bold text-lg">GREEN</span>
                       </div>
-                      <p className="text-sm font-medium">Machine Learning</p>
+                      <p className="text-sm font-medium">Green IT</p>
                     </div>
                     <div className="text-center">
                       <div className="w-16 h-16 bg-gradient-to-br from-orange-600 to-red-600 rounded-xl flex items-center justify-center mx-auto mb-2">

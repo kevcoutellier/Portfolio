@@ -2,91 +2,52 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Github, Play, Zap, Brain, Eye, BarChart3, MessageSquare, Search, Users, Code } from 'lucide-react';
+import { Github, Brain, Search, Code } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 
-const projectCategories = ['Tous', 'Green IT', 'Intelligence Artificielle', 'Enterprise Software', 'Management Tools', 'Data Science'];
+const projectCategories = ['Tous', 'Applications Web', 'Intelligence Artificielle', 'Finance & Trading'];
 
 const projects = [
   {
     id: 1,
-    title: 'Carbon Footprint Calculator - Amadeus',
-    category: 'Green IT',
-    description: 'Service de calcul d\'empreinte carbone pour ressources cloud développé chez Amadeus. Pipeline de données Azure analysant l\'impact environnemental des infrastructures IT.',
+    title: 'Trading Chart Analyzer',
+    category: 'Finance & Trading',
+    description: 'Analyseur de graphiques de trading avancé avec intelligence artificielle pour l\'analyse technique et la prédiction des tendances de marché.',
     image: '/api/placeholder/600/400',
-    tags: ['Python', 'Azure Cloud Services', 'Carbon Analytics', 'API REST', 'Data Pipeline'],
-    demo: '#',
-    code: 'https://github.com/kevcoutellier',
+    tags: ['Python', 'AI/ML', 'Trading', 'Chart Analysis', 'Technical Analysis'],
+    demo: 'https://github.com/kevcoutellier/Trading-chart-analyzer',
+    code: 'https://github.com/kevcoutellier/Trading-chart-analyzer',
     featured: true,
-    icon: BarChart3,
-    stats: { reduction: '-45%', metrics: '500K+' }
+    icon: Search,
+    stats: { ai: 'AI Analysis', markets: 'Multi-Market' }
   },
   {
     id: 2,
-    title: 'Green IT Monitoring Dashboard',
-    category: 'Sustainability',
-    description: 'Dashboard temps réel pour le monitoring de l\'impact environnemental des infrastructures IT. Visualisation des métriques de durabilité et recommandations d\'optimisation.',
+    title: 'Parcoursup V2',
+    category: 'Applications Web',
+    description: 'Application moderne de gestion Parcoursup développée en TypeScript avec une interface utilisateur avancée.',
     image: '/api/placeholder/600/400',
-    tags: ['React', 'TypeScript', 'D3.js', 'Azure', 'Carbon Data'],
-    demo: '#',
-    code: 'https://github.com/kevcoutellier',
+    tags: ['TypeScript', 'React', 'Next.js', 'Tailwind CSS'],
+    demo: 'https://github.com/kevcoutellier/Parcoursup-V2',
+    code: 'https://github.com/kevcoutellier/Parcoursup-V2',
     featured: true,
-    icon: Zap,
-    stats: { efficiency: '+60%', savings: '€180K' }
+    icon: Code,
+    stats: { components: '15+', features: 'Advanced UI' }
   },
   {
     id: 3,
-    title: 'Détection d\'Anomalies IoT',
-    category: 'Data Science',
-    description: 'Système de monitoring industriel utilisant machine learning pour la détection précoce d\'anomalies et maintenance prédictive.',
-    image: '/api/placeholder/600/400',
-    tags: ['Python', 'Scikit-learn', 'InfluxDB', 'Grafana', 'Docker'],
-    demo: '#',
-    code: '#',
-    featured: false,
-    icon: Zap,
-    stats: { downtime: '-60%', savings: '€180K' }
-  },
-  {
-    id: 4,
-    title: 'Scrum AI Assistant - Amadeus',
-    category: 'Management Tools',
-    description: 'Assistant IA pour équipes agiles développé pour optimiser les processus Scrum. Analyse des métriques d\'équipe et recommandations intelligentes en environnement SAFe.',
-    image: '/api/placeholder/600/400',
-    tags: ['Python', 'OpenAI', 'Scrum Metrics', 'FastAPI', 'Team Analytics'],
-    demo: '#',
-    code: 'https://github.com/kevcoutellier',
-    featured: false,
-    icon: Users,
-    stats: { productivity: '+35%', satisfaction: '92%' }
-  },
-  {
-    id: 5,
-    title: 'Vision par Ordinateur',
+    title: 'Real Estate MCP',
     category: 'Intelligence Artificielle',
-    description: 'Application de reconnaissance d\'objets en temps réel pour la logistique avec tracking et comptage automatique.',
+    description: 'Serveur MCP pour l\'analyse immobilière française avec Claude Desktop. Traitement intelligent des données immobilières.',
     image: '/api/placeholder/600/400',
-    tags: ['PyTorch', 'OpenCV', 'Flask', 'WebRTC', 'AWS'],
-    demo: '#',
-    code: '#',
+    tags: ['Python', 'MCP', 'Claude Desktop', 'Real Estate Analysis'],
+    demo: 'https://github.com/kevcoutellier/real-estate-mcp',
+    code: 'https://github.com/kevcoutellier/real-estate-mcp',
     featured: false,
-    icon: Eye,
-    stats: { precision: '96%', speed: '30 FPS' }
-  },
-  {
-    id: 6,
-    title: 'Enterprise Java Platform - NETISYS',
-    category: 'Enterprise Software',
-    description: 'Plateforme Java enterprise développée chez NETISYS avec Google Web Toolkit. Application métier robuste avec intégration PostgreSQL et architecture orientée objet.',
-    image: '/api/placeholder/600/400',
-    tags: ['Java', 'Google Web Toolkit', 'PostgreSQL', 'Enterprise Architecture', 'OOP'],
-    demo: '#',
-    code: 'https://github.com/kevcoutellier',
-    featured: false,
-    icon: Code,
-    stats: { performance: '+40%', reliability: '99.9%' }
+    icon: Brain,
+    stats: { ai: 'Claude Integration', data: 'French Market' }
   }
 ];
 
@@ -123,7 +84,7 @@ export function ProjectsSection() {
             </h2>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
               Découvrez mes réalisations concrètes en développement web, solutions enterprise 
-              et leadership d'équipes agiles pour créer des solutions innovantes à forte valeur ajoutée.
+              et leadership d&apos;équipes agiles pour créer des solutions innovantes à forte valeur ajoutée.
             </p>
           </motion.div>
 
@@ -155,6 +116,44 @@ export function ProjectsSection() {
                 >
                   <Card className="overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-gradient-to-br from-background to-muted/50">
                     <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 h-48">
+                      {/* Background Pattern */}
+                      <div className="absolute inset-0">
+                        {project.id === 1 && (
+                          // Trading Chart Pattern
+                          <svg className="w-full h-full opacity-10" viewBox="0 0 400 200">
+                            <path d="M0,150 Q100,100 200,120 T400,80" stroke="currentColor" strokeWidth="2" fill="none" />
+                            <path d="M0,180 Q150,130 300,140 T400,100" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                            <circle cx="100" cy="110" r="3" fill="currentColor" />
+                            <circle cx="200" cy="120" r="3" fill="currentColor" />
+                            <circle cx="300" cy="90" r="3" fill="currentColor" />
+                          </svg>
+                        )}
+                        {project.id === 2 && (
+                          // Code/UI Pattern
+                          <div className="absolute inset-0 opacity-10">
+                            <div className="absolute top-4 left-4 w-16 h-2 bg-current rounded"></div>
+                            <div className="absolute top-8 left-4 w-12 h-2 bg-current rounded"></div>
+                            <div className="absolute top-12 left-8 w-20 h-2 bg-current rounded"></div>
+                            <div className="absolute top-16 left-8 w-8 h-2 bg-current rounded"></div>
+                            <div className="absolute bottom-8 right-4 w-6 h-6 border-2 border-current rounded"></div>
+                            <div className="absolute bottom-16 right-12 w-4 h-4 border-2 border-current rounded"></div>
+                          </div>
+                        )}
+                        {project.id === 3 && (
+                          // AI/Data Pattern
+                          <div className="absolute inset-0 opacity-10">
+                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                              <div className="w-8 h-8 border-2 border-current rounded-full"></div>
+                              <div className="absolute top-2 left-12 w-6 h-6 border-2 border-current rounded-full"></div>
+                              <div className="absolute -top-4 left-6 w-4 h-4 border-2 border-current rounded-full"></div>
+                              <div className="absolute top-6 -left-8 w-5 h-5 border-2 border-current rounded-full"></div>
+                              <div className="absolute -top-2 -left-4 w-0.5 h-6 bg-current"></div>
+                              <div className="absolute top-4 left-2 w-6 h-0.5 bg-current"></div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      
                       {/* Project Icon */}
                       <div className="absolute top-4 left-4 w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                         <project.icon className="w-6 h-6 text-white" />
@@ -173,16 +172,23 @@ export function ProjectsSection() {
                       <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: hoveredProject === project.id ? 1 : 0 }}
-                        className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20 flex items-center justify-center"
+                        className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20 backdrop-blur-sm flex items-center justify-center"
                       >
-                        <div className="flex space-x-4">
-                          <Button size="sm" variant="secondary">
-                            <Play className="w-4 h-4 mr-2" />
-                            Demo
-                          </Button>
-                          <Button size="sm" variant="secondary">
-                            <Github className="w-4 h-4 mr-2" />
-                            Code
+                        <div className="text-center">
+                          <div className="mb-4">
+                            <project.icon className="w-12 h-12 text-white mx-auto mb-2" />
+                            <p className="text-white text-sm font-medium">{project.title}</p>
+                          </div>
+                          <Button 
+                            size="sm" 
+                            variant="secondary"
+                            asChild
+                            className="bg-white/90 hover:bg-white text-gray-900"
+                          >
+                            <a href={project.code} target="_blank" rel="noopener noreferrer">
+                              <Github className="w-4 h-4 mr-2" />
+                              Voir le code
+                            </a>
                           </Button>
                         </div>
                       </motion.div>
@@ -208,9 +214,11 @@ export function ProjectsSection() {
                       </div>
                       
                       <div className="flex space-x-2">
-                        <Button size="sm" variant="outline" className="flex-1">
-                          <ExternalLink className="w-4 h-4 mr-2" />
-                          Voir le projet
+                        <Button size="sm" variant="outline" className="flex-1" asChild>
+                          <a href={project.code} target="_blank" rel="noopener noreferrer">
+                            <Github className="w-4 h-4 mr-2" />
+                            Voir le code
+                          </a>
                         </Button>
                       </div>
                     </CardContent>
@@ -276,13 +284,11 @@ export function ProjectsSection() {
                         className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-purple-600/10 flex items-center justify-center"
                       >
                         <div className="flex space-x-2">
-                          <Button size="sm" variant="secondary" className="h-8 px-3 text-xs">
-                            <Play className="w-3 h-3 mr-1" />
-                            Demo
-                          </Button>
-                          <Button size="sm" variant="secondary" className="h-8 px-3 text-xs">
-                            <Github className="w-3 h-3 mr-1" />
-                            Code
+                          <Button size="sm" variant="secondary" className="h-8 px-3 text-xs" asChild>
+                            <a href={project.code} target="_blank" rel="noopener noreferrer">
+                              <Github className="w-3 h-3 mr-1" />
+                              Code
+                            </a>
                           </Button>
                         </div>
                       </motion.div>
@@ -312,9 +318,11 @@ export function ProjectsSection() {
                         )}
                       </div>
                       
-                      <Button size="sm" variant="outline" className="w-full h-8 text-xs">
-                        <ExternalLink className="w-3 h-3 mr-2" />
-                        Voir le projet
+                      <Button size="sm" variant="outline" className="w-full h-8 text-xs" asChild>
+                        <a href={project.code} target="_blank" rel="noopener noreferrer">
+                          <Github className="w-3 h-3 mr-2" />
+                          Voir le code
+                        </a>
                       </Button>
                     </CardContent>
                   </Card>

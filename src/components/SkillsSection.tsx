@@ -30,15 +30,15 @@ const skillCategories = [
     ]
   },
   {
-    category: 'Intelligence Artificielle',
+    category: 'Technologies Modernes',
     color: 'from-purple-600 to-pink-600',
     skills: [
-      { name: 'TensorFlow', level: 90 },
-      { name: 'PyTorch', level: 85 },
-      { name: 'OpenAI API', level: 95 },
-      { name: 'LangChain', level: 88 },
-      { name: 'Scikit-learn', level: 87 },
-      { name: 'Computer Vision', level: 80 }
+      { name: 'React.js', level: 95 },
+      { name: 'Node.js', level: 90 },
+      { name: 'MongoDB', level: 88 },
+      { name: 'Socket.io', level: 87 },
+      { name: 'Ruby on Rails', level: 85 },
+      { name: 'Blockchain', level: 80 }
     ]
   },
   {
@@ -68,9 +68,9 @@ const skillCategories = [
 ];
 
 const technologies = [
-  'React', 'Next.js', 'TypeScript', 'Python', 'Node.js', 'TensorFlow', 
-  'OpenAI', 'LangChain', 'FastAPI', 'PostgreSQL', 'MongoDB', 'Docker', 
-  'AWS', 'Tailwind CSS', 'Framer Motion', 'PyTorch', 'Scikit-learn', 
+  'React', 'Next.js', 'TypeScript', 'Python', 'Node.js', 'Java', 
+  'Azure Cloud', 'Scrum', 'FastAPI', 'PostgreSQL', 'MongoDB', 'Docker', 
+  'SAFe', 'Tailwind CSS', 'Framer Motion', 'Ruby on Rails', 'Carbon Analytics', 
   'Express.js', 'Vue.js', 'Git', 'Linux', 'Nginx'
 ];
 
@@ -98,7 +98,7 @@ export function SkillsSection() {
             </h2>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Une expertise technique solide couvrant toute la chaîne de développement, 
-              de l&apos;interface utilisateur aux algorithmes d&apos;intelligence artificielle.
+              du management agile aux solutions durables et performantes.
             </p>
           </motion.div>
 

@@ -13,29 +13,29 @@ const contactMethods = [
   {
     icon: Mail,
     title: 'Email',
-    content: 'kevin.developer@ai-portfolio.dev',
-    href: 'mailto:kevin.developer@ai-portfolio.dev',
+    content: 'kev.coutellier@gmail.com',
+    href: 'mailto:kev.coutellier@gmail.com',
     color: 'from-blue-600 to-cyan-600'
   },
   {
     icon: Github,
     title: 'GitHub',
-    content: '@kevin-ai-dev',
-    href: 'https://github.com',
+    content: '@kevcoutellier',
+    href: 'https://github.com/kevcoutellier',
     color: 'from-gray-700 to-gray-900 dark:from-gray-400 dark:to-gray-600'
   },
   {
     icon: Linkedin,
     title: 'LinkedIn',
-    content: 'Kevin AI Developer',
-    href: 'https://linkedin.com',
+    content: 'Kevin Coutellier',
+    href: 'https://www.linkedin.com/in/kevin-coutellier-1b900b7b/',
     color: 'from-blue-600 to-blue-800'
   },
   {
     icon: Phone,
     title: 'Téléphone',
-    content: '+33 6 12 34 56 78',
-    href: 'tel:+33612345678',
+    content: '07 88 44 02 32',
+    href: 'tel:+33788440232',
     color: 'from-green-600 to-emerald-600'
   }
 ];
@@ -179,11 +179,11 @@ export function ContactSection() {
                   </div>
                   <div>
                     <h4 className="font-semibold">Localisation</h4>
-                    <p className="text-sm text-muted-foreground">France • Remote friendly</p>
+                    <p className="text-sm text-muted-foreground">Antibes, France • Remote friendly</p>
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Basé en France, je travaille avec des clients du monde entier. 
+                  Basé à Antibes, je travaille avec des clients du monde entier. 
                   Disponible pour des missions en remote ou sur site selon vos besoins.
                 </p>
               </motion.div>
@@ -329,7 +329,7 @@ export function ContactSection() {
                 <Button
                   variant="outline"
                   size="lg"
-                  onClick={() => window.open('mailto:kevin.developer@ai-portfolio.dev', '_blank')}
+                  onClick={() => window.open('mailto:kev.coutellier@gmail.com', '_blank')}
                 >
                   <Mail className="w-4 h-4 mr-2" />
                   Email direct
