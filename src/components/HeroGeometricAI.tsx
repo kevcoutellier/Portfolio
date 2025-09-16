@@ -6,75 +6,79 @@ import { cn } from "@/lib/utils";
 import { EnhancedButton } from "@/components/ui/enhanced-button";
 
 function AIShape({
-    className,
-    delay = 0,
-    width = 400,
-    height = 100,
-    rotate = 0,
-    gradient = "from-blue-500/[0.15]",
-    icon: IconComponent,
+  className,
+  delay = 0,
+  width = 400,
+  height = 100,
+  rotate = 0,
+  gradient = "from-blue-500/[0.15]",
+  icon: IconComponent,
 }: {
-    className?: string;
-    delay?: number;
-    width?: number;
-    height?: number;
-    rotate?: number;
-    gradient?: string;
-    icon?: React.ElementType;
+  className?: string;
+  delay?: number;
+  width?: number;
+  height?: number;
+  rotate?: number;
+  gradient?: string;
+  icon?: React.ElementType;
 }) {
-    return (
-        <motion.div
-            initial={{
-                opacity: 0,
-                y: -150,
-                rotate: rotate - 15,
-                scale: 0.8,
-            }}
-            animate={{
-                opacity: 1,
-                y: 0,
-                rotate: rotate,
-                scale: 1,
-            }}
-            transition={{
-                duration: 2.4,
-                delay,
-                ease: [0.23, 0.86, 0.39, 0.96],
-                opacity: { duration: 1.2 },
-            }}
-            className={cn("absolute", className)}
-        >
-            <motion.div
-                animate={{
-                    y: [0, 15, 0],
-                    rotate: [rotate, rotate + 5, rotate],
-                }}
-                transition={{
-                    duration: 12,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "easeInOut",
-                }}
-                style={{
-                    width,
-                    height,
-                }}
-                className="relative"
-            >
-                <div
-                    className={cn(
-                        "absolute inset-0 rounded-full",
-                        "bg-gradient-to-r to-transparent",
-                        gradient,
-                        "backdrop-blur-[2px] border-2 border-blue-500/[0.2] dark:border-white/[0.15]",
-                        "shadow-[0_8px_32px_0_rgba(59,130,246,0.15)]",
-                        "after:absolute after:inset-0 after:rounded-full",
-                        "after:bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.3),transparent_70%)]"
-                    )}
-                />
-                
-                {/* AI Icon dans la forme */}
-                {IconComponent && (
-                    <div className="absolute inset-0 flex items-center justify-center">
+  return (
+    <motion.div
+      initial={{
+        opacity: 0,
+        y: -150,
+        rotate: rotate - 15,
+        scale: 0.8,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        rotate: rotate,
+        scale: 1,
+      }}
+      transition={{
+        duration: 2.4,
+        delay,
+        opacity: { duration: 1.2 },
+      }}
+      className={cn("absolute", className)}
+    >
+      <motion.div
+        animate={{
+          y: [0, 15, 0],
+          rotate: [rotate, rotate + 5, rotate],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Number.POSITIVE_INFINITY,
+          ease: "easeInOut",
+        }}
+        style={{
+          width,
+          height,
+        }}
+        className="relative"
+      >
+        <div
+          className={cn(
+            "absolute inset-0 rounded-full",
+            "bg-gradient-to-r to-transparent",
+            gradient,
+            "backdrop-blur-[2px] border-2 border-blue-500/[0.2] dark:border-white/[0.15]",
+            "shadow-[0_8px_32px_0_rgba(59,130,246,0.15)]",
+            "after:absolute after:inset-0 after:rounded-full",
+            "after:bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.3),transparent_70%)]"
+          )}
+        />
+        {/* AI Icon dans la forme */}
+        {IconComponent && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <IconComponent className="w-6 h-6 text-blue-400/60" />
+          </div>
+        )}
+      </motion.div>
+    </motion.div>
+  );
                         <IconComponent className="w-6 h-6 text-blue-400/60" />
                     </div>
                 )}
@@ -91,15 +95,14 @@ function HeroGeometricAI() {
 
     const fadeUpVariants = {
         hidden: { opacity: 0, y: 30 },
-        visible: (i: number) => ({
+        visible: {
             opacity: 1,
             y: 0,
             transition: {
                 duration: 1,
-                delay: 0.5 + i * 0.2,
-                ease: [0.25, 0.4, 0.25, 1],
+                ease: "easeInOut",
             },
-        }),
+        },
     };
 
     return (
@@ -162,10 +165,10 @@ function HeroGeometricAI() {
                 <div className="max-w-4xl mx-auto text-center">
                     {/* Badge AI */}
                     <motion.div
-                        custom={0}
                         variants={fadeUpVariants}
                         initial="hidden"
                         animate="visible"
+                        transition={{ delay: 0.5 }}
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 dark:border-white/[0.08] mb-8 md:mb-12"
                     >
                         <Sparkles className="h-4 w-4 text-blue-500 dark:text-blue-400" />
@@ -176,10 +179,10 @@ function HeroGeometricAI() {
 
                     {/* Titre principal */}
                     <motion.div
-                        custom={1}
                         variants={fadeUpVariants}
                         initial="hidden"
                         animate="visible"
+                        transition={{ delay: 0.7 }}
                     >
                         <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 md:mb-8 tracking-tight leading-tight">
                             <span className="bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/80">
@@ -194,10 +197,10 @@ function HeroGeometricAI() {
 
                     {/* Description */}
                     <motion.div
-                        custom={2}
                         variants={fadeUpVariants}
                         initial="hidden"
                         animate="visible"
+                        transition={{ delay: 0.9 }}
                     >
                         <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-8 md:mb-12 leading-relaxed font-light tracking-wide max-w-2xl mx-auto px-4">
                             Je transforme vos idées en solutions intelligentes avec des applications web modernes, 
@@ -207,10 +210,10 @@ function HeroGeometricAI() {
 
                     {/* Boutons d'action */}
                     <motion.div
-                        custom={3}
                         variants={fadeUpVariants}
                         initial="hidden"
                         animate="visible"
+                        transition={{ delay: 1.1 }}
                         className="flex flex-col sm:flex-row gap-4 justify-center items-center"
                     >
                         <EnhancedButton
@@ -239,10 +242,10 @@ function HeroGeometricAI() {
 
                     {/* Stats */}
                     <motion.div
-                        custom={4}
                         variants={fadeUpVariants}
                         initial="hidden"
                         animate="visible"
+                        transition={{ delay: 1.3 }}
                         className="grid grid-cols-3 gap-6 pt-12 md:pt-16 max-w-md mx-auto"
                     >
                         <div className="text-center">
