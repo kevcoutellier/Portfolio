@@ -210,12 +210,12 @@ export function SkillsSection() {
               <div className="space-y-12">
                 {[
                   {
-                    year: '2024',
+                    year: '2024 à maintenant',
                     title: 'Scrum Master & Développeur - Amadeus',
                     description: 'Leadership d\'équipes agiles et développement de solutions Carbon Analytics avec pipelines Azure.'
                   },
                   {
-                    year: '2019-2023',
+                    year: '2023-2024',
                     title: 'Développeur Java Enterprise - NETISYS',
                     description: 'Développement d\'applications enterprise Java avec Google Web Toolkit et architecture orientée objet.'
                   },
