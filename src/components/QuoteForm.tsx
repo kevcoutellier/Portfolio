@@ -943,18 +943,9 @@ export function QuoteForm() {
               </AnimatePresence>
 
               {/* Navigation */}
-              <div className="flex justify-between items-center mt-8 pt-6 border-t">
-                <Button
-                  variant="outline"
-                  onClick={prevStep}
-                  disabled={currentStep === 1}
-                  className="flex items-center"
-                >
-                  <ChevronLeft className="w-4 h-4 mr-2" />
-                  Précédent
-                </Button>
-
-                <div className="flex space-x-2">
+              <div className="mt-8 pt-6 border-t">
+                {/* Progress Dots - Centré */}
+                <div className="flex justify-center space-x-2 mb-6">
                   {Array.from({ length: totalSteps }, (_, i) => (
                     <div
                       key={i}
@@ -969,39 +960,54 @@ export function QuoteForm() {
                   ))}
                 </div>
 
-                {currentStep < totalSteps ? (
+                {/* Boutons de Navigation */}
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                   <Button
-                    onClick={nextStep}
-                    disabled={
-                      (currentStep === 1 && !formData.projectType) ||
-                      (currentStep === 4 && (!formData.contact.name || !formData.contact.email))
-                    }
-                    className="flex items-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                    variant="outline"
+                    onClick={prevStep}
+                    disabled={currentStep === 1}
+                    className="flex items-center w-full sm:w-auto"
                   >
-                    Suivant
-                    <ChevronRight className="w-4 h-4 ml-2" />
+                    <ChevronLeft className="w-4 h-4 mr-2" />
+                    Précédent
                   </Button>
-                ) : (
-                  <div className="flex space-x-2">
-                    <Button 
-                      variant="outline" 
-                      className="flex items-center"
-                      onClick={() => generatePDF(true)}
-                      disabled={!formData.contact.name || !formData.contact.email}
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      PDF seul
-                    </Button>
+
+                  {currentStep < totalSteps ? (
                     <Button
-                      onClick={handleSubmit}
-                      disabled={!formData.contact.name || !formData.contact.email}
-                      className="flex items-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                      onClick={nextStep}
+                      disabled={
+                        (currentStep === 1 && !formData.projectType) ||
+                        (currentStep === 4 && (!formData.contact.name || !formData.contact.email))
+                      }
+                      className="flex items-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 w-full sm:w-auto"
                     >
-                      <Send className="w-4 h-4 mr-2" />
-                      PDF + Email
+                      Suivant
+                      <ChevronRight className="w-4 h-4 ml-2" />
                     </Button>
-                  </div>
-                )}
+                  ) : (
+                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                      <Button 
+                        variant="outline" 
+                        className="flex items-center w-full sm:w-auto"
+                        onClick={() => generatePDF(true)}
+                        disabled={!formData.contact.name || !formData.contact.email}
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        <span className="hidden sm:inline">PDF seul</span>
+                        <span className="sm:hidden">PDF</span>
+                      </Button>
+                      <Button
+                        onClick={handleSubmit}
+                        disabled={!formData.contact.name || !formData.contact.email}
+                        className="flex items-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 w-full sm:w-auto"
+                      >
+                        <Send className="w-4 h-4 mr-2" />
+                        <span className="hidden sm:inline">PDF + Email</span>
+                        <span className="sm:hidden">Envoyer</span>
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
             </CardContent>
           </Card>
