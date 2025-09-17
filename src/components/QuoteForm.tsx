@@ -470,99 +470,95 @@ export function QuoteForm() {
     }
   };
 
+  // Test simple sans PDF
+  const testSimpleEmail = async () => {
+    try {
+      console.log('🧪 Test simple EmailJS sans PDF...');
+      
+      const serviceID = 'service_wgy3ueg';
+      const templateID = 'template_sgpdgu6';
+      const publicKey = 'y0xJe_AwSWPlLDLgh';
+      
+      emailjs.init(publicKey);
+      
+      const simpleParams = {
+        email: 'kev.coutellier@gmail.com',
+        client_name: formData.contact.name,
+        message: 'Test simple sans PDF'
+      };
+      
+      console.log('📧 Test params:', simpleParams);
+      
+      const response = await emailjs.send(serviceID, templateID, simpleParams);
+      console.log('✅ Test réussi:', response);
+      return true;
+    } catch (error) {
+      console.error('❌ Test échoué:', error);
+      return false;
+    }
+  };
+
+  // Suppression de la fonction dupliquée - utilisation de celle plus bas
+
   const sendEmailWithPDF = async () => {
     try {
-      console.log('🔧 Début génération PDF...');
+      console.log('📧 Envoi email devis complet...');
       
-      // Générer le PDF en blob
-      const pdfData = await generatePDF(false);
-      if (!pdfData) throw new Error('Impossible de générer le PDF');
-      
-      console.log('✅ PDF généré:', pdfData.filename, 'Taille:', pdfData.blob.size, 'bytes');
-
       const priceWithTax = calculatePriceWithTax();
       const selectedProject = projectTypes.find(p => p.id === formData.projectType);
 
-      // Convertir le blob en base64 pour EmailJS
-      const reader = new FileReader();
-      reader.readAsDataURL(pdfData.blob);
+      // Configuration EmailJS
+      const serviceID = 'service_wgy3ueg';
+      const templateID = 'template_sgpdgu6';
+      const publicKey = 'y0xJe_AwSWPlLDLgh';
+
+      // Initialiser EmailJS
+      emailjs.init(publicKey);
       
-      return new Promise((resolve, reject) => {
-        reader.onload = async () => {
-          try {
-            console.log('🔧 Conversion en base64...');
-            const base64Data = (reader.result as string).split(',')[1];
-            console.log('✅ Base64 généré, taille:', base64Data.length, 'caractères');
-            
-            // Configuration EmailJS
-            const serviceID = 'service_wgy3ueg';
-            const templateID = 'template_sgpdgu6';
-            const publicKey = 'y0xJe_AwSWPlLDLgh';
+      // Préparer les détails du devis pour l'email
+      const selectedFeatures = formData.features.map(featureId => {
+        const feature = features.find(f => f.id === featureId);
+        return feature ? `${feature.name} (+${feature.price}€)` : '';
+      }).filter(Boolean);
 
-            // Initialiser EmailJS avec la clé publique
-            console.log('🔧 Initialisation EmailJS...');
-            emailjs.init(publicKey);
-            console.log('✅ EmailJS initialisé');
-            
-            const templateParams = {
-              to_email: formData.contact.email,
-              client_name: formData.contact.name,
-              client_company: formData.contact.company || '',
-              project_type: selectedProject?.name || '',
-              total_price: priceWithTax.priceTTC,
-              client_message: formData.contact.message || '',
-              // Format simple pour les pièces jointes
-              attachment_name: pdfData.filename,
-              attachment_data: base64Data
-            };
+      const urgencyInfo = formData.urgency !== 'standard' ? 
+        `Délais ${formData.urgency} (${urgencyMultipliers[formData.urgency as keyof typeof urgencyMultipliers].name})` : '';
 
-            console.log('📧 Paramètres email:', {
-              to: templateParams.to_email,
-              client: templateParams.client_name,
-              project: templateParams.project_type,
-              price: templateParams.total_price,
-              attachment_size: base64Data.length
-            });
+      // Template parameters avec toutes les infos du devis
+      const templateParams = {
+        email: formData.contact.email,
+        client_name: formData.contact.name,
+        client_company: formData.contact.company || '',
+        project_type: selectedProject?.name || '',
+        project_description: selectedProject?.description || '',
+        base_price: selectedProject?.basePrice || 0,
+        features_list: selectedFeatures.join(', ') || 'Aucune fonctionnalité supplémentaire',
+        urgency_info: urgencyInfo,
+        price_ht: priceWithTax.priceHT,
+        tva_amount: priceWithTax.tva,
+        total_price: priceWithTax.priceTTC,
+        client_message: formData.contact.message || 'Aucun message spécifique',
+        timeline: formData.timeline,
+        budget: formData.budget
+      };
 
-            console.log('🚀 Envoi via EmailJS...');
-            const response = await emailjs.send(serviceID, templateID, templateParams);
-            console.log('✅ EmailJS réponse complète:', response);
-            
-            if (response.status === 200 || response.text === 'OK') {
-              console.log('🎉 Email envoyé avec succès !');
-              resolve(true);
-            } else {
-              const errorMsg = `EmailJS erreur: status=${response.status}, text=${response.text}`;
-              console.error('❌', errorMsg);
-              reject(new Error(errorMsg));
-            }
-          } catch (error) {
-            console.error('❌ Erreur détaillée EmailJS:');
-            console.error('Type:', typeof error);
-            console.error('Message:', error instanceof Error ? error.message : 'Erreur inconnue');
-            console.error('Stack:', error instanceof Error ? error.stack : 'Pas de stack');
-            console.error('Objet complet:', error);
-            
-            let errorMessage = 'Erreur EmailJS: ';
-            if (error instanceof Error) {
-              errorMessage += error.message;
-            } else if (typeof error === 'string') {
-              errorMessage += error;
-            } else {
-              errorMessage += JSON.stringify(error) || 'Erreur inconnue';
-            }
-            
-            reject(new Error(errorMessage));
-          }
-        };
-        
-        reader.onerror = (err) => {
-          console.error('❌ Erreur lecture fichier:', err);
-          reject(new Error('Erreur lors de la lecture du PDF'));
-        };
+      console.log('📧 Envoi email avec devis complet:', {
+        to: templateParams.email,
+        client: templateParams.client_name,
+        project: templateParams.project_type,
+        total: templateParams.total_price
       });
+
+      const response = await emailjs.send(serviceID, templateID, templateParams);
+      console.log('✅ Email devis envoyé:', response);
+      
+      if (response.status === 200 || response.text === 'OK') {
+        return true;
+      } else {
+        throw new Error(`EmailJS erreur: ${response.status}`);
+      }
     } catch (error) {
-      console.error('❌ Erreur génération PDF:', error);
+      console.error('❌ Erreur envoi email:', error);
       throw error;
     }
   };
@@ -575,7 +571,7 @@ export function QuoteForm() {
       await sendEmailWithPDF();
       
       const priceWithTax = calculatePriceWithTax();
-      alert(`✅ Devis envoyé avec succès !\n\nUn email avec le devis PDF a été envoyé automatiquement à :\n📧 ${formData.contact.email}\n\nMontant: ${priceWithTax.priceTTC}€ TTC`);
+      alert(`✅ Devis envoyé avec succès !\n\n📧 Email HTML détaillé envoyé à : ${formData.contact.email}\n📋 Toutes les informations du devis sont incluses dans l'email\n\nMontant: ${priceWithTax.priceTTC}€ TTC\n\nVous pouvez également télécharger le PDF depuis le bouton "PDF seul" si nécessaire.`);
       
     } catch (error) {
       console.error('❌ Erreur détaillée lors de l\'envoi:', error);
@@ -1002,7 +998,7 @@ export function QuoteForm() {
                         className="flex items-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 w-full sm:w-auto"
                       >
                         <Send className="w-4 h-4 mr-2" />
-                        <span className="hidden sm:inline">PDF + Email</span>
+                        <span className="hidden sm:inline">Envoyer Devis</span>
                         <span className="sm:hidden">Envoyer</span>
                       </Button>
                     </div>
