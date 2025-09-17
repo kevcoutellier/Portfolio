@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
-interface EnhancedCardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface EnhancedCardProps extends Omit<HTMLMotionProps<'div'>, 'children' | 'onDrag' | 'onDragStart' | 'onDragEnd'> {
   children: React.ReactNode;
   hover?: boolean;
   glowEffect?: boolean;
