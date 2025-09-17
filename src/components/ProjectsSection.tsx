@@ -6,8 +6,14 @@ import { Github, Brain, Search, Code, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import Image from 'next/image';
 
 const projectCategories = ['Tous', 'Applications Web', 'Automatisation', 'Design & Creative', 'Finance & Trading'];
+
+// Fonction utilitaire pour obtenir le chemin des screenshots locaux
+const getProjectImage = (filename: string) => {
+  return `/images/projects/${filename}`;
+};
 
 const projects = [
   {
@@ -15,7 +21,7 @@ const projects = [
     title: 'Trading Chart Analyzer',
     category: 'Finance & Trading',
     description: 'Analyseur de graphiques de trading avancé avec intelligence artificielle pour l\'analyse technique et la prédiction des tendances de marché.',
-    image: '/api/placeholder/600/400',
+    image: getProjectImage('trading-chart-analyzer.png'),
     tags: ['Python', 'AI/ML', 'Trading', 'Chart Analysis', 'Technical Analysis'],
     demo: 'https://trading-chart-analyzer-seven.vercel.app',
     code: 'https://github.com/kevcoutellier/Trading-chart-analyzer',
@@ -28,7 +34,7 @@ const projects = [
     title: 'Automation N8N Business',
     category: 'Automatisation',
     description: 'Plateforme d\'automatisation des processus métier utilisant N8N pour créer des workflows intelligents et optimiser la productivité.',
-    image: '/api/placeholder/600/400',
+    image: getProjectImage('automation-n8n-business.png'),
     tags: ['N8N', 'Automation', 'Workflows', 'Business Process', 'Integration'],
     demo: 'https://automation-n8n-business.vercel.app',
     code: 'https://github.com/kevcoutellier/Automation-n8n-business',
@@ -40,8 +46,8 @@ const projects = [
     id: 3,
     title: 'Automate Hub Factory',
     category: 'Automatisation',
-    description: 'Hub central d\'automatisation industrielle pour la gestion des processus de production et le monitoring en temps réel.',
-    image: '/api/placeholder/600/400',
+    description: 'Plateforme de mise en relation entre Experts en Automatisation et Entreprises en recherche de solutions d\'automatisation.',
+    image: getProjectImage('automate-hub-factory.png'),
     tags: ['Automation', 'Manufacturing', 'IoT', 'Monitoring', 'Dashboard'],
     demo: 'https://automate-hub-factory.vercel.app',
     code: 'https://github.com/kevcoutellier/AutomateHub-factory',
@@ -54,7 +60,7 @@ const projects = [
     title: 'Dreamscape Charte',
     category: 'Design & Creative',
     description: 'Outil de création et gestion de chartes graphiques pour projets créatifs avec interface moderne et intuitive.',
-    image: '/api/placeholder/600/400',
+    image: getProjectImage('dreamscape-charte.png'),
     tags: ['Design System', 'Branding', 'Creative Tools', 'UI/UX', 'Collaboration'],
     demo: 'https://dreamscape-charte.vercel.app',
     code: 'https://github.com/kevcoutellier/DREAMSCAPE-charte',
@@ -67,7 +73,7 @@ const projects = [
     title: 'Parcoursup V2',
     category: 'Applications Web',
     description: 'Application moderne de gestion Parcoursup développée en TypeScript avec une interface utilisateur avancée.',
-    image: '/api/placeholder/600/400',
+    image: getProjectImage('parcoursup-v2.png'),
     tags: ['TypeScript', 'React', 'Next.js', 'Tailwind CSS'],
     demo: 'https://parcoursup-v2.vercel.app/',
     code: 'https://github.com/kevcoutellier/Parcoursup-V2',
@@ -142,7 +148,21 @@ export function ProjectsSection() {
                 >
                   <Card className="overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-gradient-to-br from-background to-muted/50">
                     <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 h-48">
-                      {/* Background Pattern */}
+                      {/* Project Preview Image */}
+                      <Image 
+                        src={project.image} 
+                        alt={`Preview de ${project.title}`}
+                        fill
+                        className="object-cover object-top opacity-80"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        unoptimized={true}
+                        onError={(e) => {
+                          // Fallback si l'image ne charge pas
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                      
+                      {/* Background Pattern (fallback) */}
                       <div className="absolute inset-0">
                         {project.id === 1 && (
                           // Trading Chart Pattern
@@ -319,7 +339,22 @@ export function ProjectsSection() {
                 >
                   <Card className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-background to-muted/50 h-full">
                     <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 h-40">
-                      <div className="absolute top-3 left-3 w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                      {/* Project Preview Image */}
+                      <Image 
+                        src={project.image} 
+                        alt={`Preview de ${project.title}`}
+                        fill
+                        className="object-cover object-top opacity-80"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        unoptimized={true}
+                        onError={(e) => {
+                          // Fallback si l'image ne charge pas
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                      
+                      {/* Project Icon over preview */}
+                      <div className="absolute top-3 left-3 w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
                         <project.icon className="w-5 h-5 text-white" />
                       </div>
                       
