@@ -2,12 +2,12 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Github, Brain, Search, Code } from 'lucide-react';
+import { Github, Brain, Search, Code, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 
-const projectCategories = ['Tous', 'Applications Web', 'Intelligence Artificielle', 'Finance & Trading'];
+const projectCategories = ['Tous', 'Applications Web', 'Automatisation', 'Design & Creative', 'Finance & Trading'];
 
 const projects = [
   {
@@ -17,7 +17,7 @@ const projects = [
     description: 'Analyseur de graphiques de trading avancé avec intelligence artificielle pour l\'analyse technique et la prédiction des tendances de marché.',
     image: '/api/placeholder/600/400',
     tags: ['Python', 'AI/ML', 'Trading', 'Chart Analysis', 'Technical Analysis'],
-    demo: 'https://github.com/kevcoutellier/Trading-chart-analyzer',
+    demo: 'https://trading-chart-analyzer-seven.vercel.app',
     code: 'https://github.com/kevcoutellier/Trading-chart-analyzer',
     featured: true,
     icon: Search,
@@ -25,29 +25,55 @@ const projects = [
   },
   {
     id: 2,
+    title: 'Automation N8N Business',
+    category: 'Automatisation',
+    description: 'Plateforme d\'automatisation des processus métier utilisant N8N pour créer des workflows intelligents et optimiser la productivité.',
+    image: '/api/placeholder/600/400',
+    tags: ['N8N', 'Automation', 'Workflows', 'Business Process', 'Integration'],
+    demo: 'https://automation-n8n-business.vercel.app',
+    code: 'https://github.com/kevcoutellier/Automation-n8n-business',
+    featured: true,
+    icon: Code,
+    stats: { workflows: '10+', integrations: 'Multi-API' }
+  },
+  {
+    id: 3,
+    title: 'Automate Hub Factory',
+    category: 'Automatisation',
+    description: 'Hub central d\'automatisation industrielle pour la gestion des processus de production et le monitoring en temps réel.',
+    image: '/api/placeholder/600/400',
+    tags: ['Automation', 'Manufacturing', 'IoT', 'Monitoring', 'Dashboard'],
+    demo: 'https://automate-hub-factory.vercel.app',
+    code: 'https://github.com/kevcoutellier/AutomateHub-factory',
+    featured: false,
+    icon: Brain,
+    stats: { processes: 'Real-time', monitoring: 'IoT Connected' }
+  },
+  {
+    id: 4,
+    title: 'Dreamscape Charte',
+    category: 'Design & Creative',
+    description: 'Outil de création et gestion de chartes graphiques pour projets créatifs avec interface moderne et intuitive.',
+    image: '/api/placeholder/600/400',
+    tags: ['Design System', 'Branding', 'Creative Tools', 'UI/UX', 'Collaboration'],
+    demo: 'https://dreamscape-charte.vercel.app',
+    code: 'https://github.com/kevcoutellier/DREAMSCAPE-charte',
+    featured: false,
+    icon: Search,
+    stats: { templates: '20+', exports: 'Multi-format' }
+  },
+  {
+    id: 5,
     title: 'Parcoursup V2',
     category: 'Applications Web',
     description: 'Application moderne de gestion Parcoursup développée en TypeScript avec une interface utilisateur avancée.',
     image: '/api/placeholder/600/400',
     tags: ['TypeScript', 'React', 'Next.js', 'Tailwind CSS'],
-    demo: 'https://github.com/kevcoutellier/Parcoursup-V2',
+    demo: 'https://parcoursup-v2.vercel.app/',
     code: 'https://github.com/kevcoutellier/Parcoursup-V2',
-    featured: true,
+    featured: false,
     icon: Code,
     stats: { components: '15+', features: 'Advanced UI' }
-  },
-  {
-    id: 3,
-    title: 'Real Estate MCP',
-    category: 'Intelligence Artificielle',
-    description: 'Serveur MCP pour l\'analyse immobilière française avec Claude Desktop. Traitement intelligent des données immobilières.',
-    image: '/api/placeholder/600/400',
-    tags: ['Python', 'MCP', 'Claude Desktop', 'Real Estate Analysis'],
-    demo: 'https://github.com/kevcoutellier/real-estate-mcp',
-    code: 'https://github.com/kevcoutellier/real-estate-mcp',
-    featured: false,
-    icon: Brain,
-    stats: { ai: 'Claude Integration', data: 'French Market' }
   }
 ];
 
@@ -179,17 +205,30 @@ export function ProjectsSection() {
                             <project.icon className="w-12 h-12 text-white mx-auto mb-2" />
                             <p className="text-white text-sm font-medium">{project.title}</p>
                           </div>
-                          <Button 
-                            size="sm" 
-                            variant="secondary"
-                            asChild
-                            className="bg-white/90 hover:bg-white text-gray-900"
-                          >
-                            <a href={project.code} target="_blank" rel="noopener noreferrer">
-                              <Github className="w-4 h-4 mr-2" />
-                              Voir le code
-                            </a>
-                          </Button>
+                          <div className="flex gap-2">
+                            <Button 
+                              size="sm" 
+                              variant="secondary"
+                              asChild
+                              className="bg-white/90 hover:bg-white text-gray-900"
+                            >
+                              <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="w-4 h-4 mr-2" />
+                                Démo
+                              </a>
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              asChild
+                              className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                            >
+                              <a href={project.code} target="_blank" rel="noopener noreferrer">
+                                <Github className="w-4 h-4 mr-2" />
+                                Code
+                              </a>
+                            </Button>
+                          </div>
                         </div>
                       </motion.div>
                     </div>
@@ -214,10 +253,16 @@ export function ProjectsSection() {
                       </div>
                       
                       <div className="flex space-x-2">
+                        <Button size="sm" className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white" asChild>
+                          <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink className="w-4 h-4 mr-2" />
+                            Voir la démo
+                          </a>
+                        </Button>
                         <Button size="sm" variant="outline" className="flex-1" asChild>
                           <a href={project.code} target="_blank" rel="noopener noreferrer">
                             <Github className="w-4 h-4 mr-2" />
-                            Voir le code
+                            Code
                           </a>
                         </Button>
                       </div>
@@ -285,6 +330,12 @@ export function ProjectsSection() {
                       >
                         <div className="flex space-x-2">
                           <Button size="sm" variant="secondary" className="h-8 px-3 text-xs" asChild>
+                            <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                              <ExternalLink className="w-3 h-3 mr-1" />
+                              Démo
+                            </a>
+                          </Button>
+                          <Button size="sm" variant="outline" className="h-8 px-3 text-xs bg-white/20 hover:bg-white/30 text-white border-white/30" asChild>
                             <a href={project.code} target="_blank" rel="noopener noreferrer">
                               <Github className="w-3 h-3 mr-1" />
                               Code
@@ -318,12 +369,20 @@ export function ProjectsSection() {
                         )}
                       </div>
                       
-                      <Button size="sm" variant="outline" className="w-full h-8 text-xs" asChild>
-                        <a href={project.code} target="_blank" rel="noopener noreferrer">
-                          <Github className="w-3 h-3 mr-2" />
-                          Voir le code
-                        </a>
-                      </Button>
+                      <div className="flex space-x-2">
+                        <Button size="sm" className="flex-1 h-8 text-xs bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white" asChild>
+                          <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink className="w-3 h-3 mr-1" />
+                            Démo
+                          </a>
+                        </Button>
+                        <Button size="sm" variant="outline" className="flex-1 h-8 text-xs" asChild>
+                          <a href={project.code} target="_blank" rel="noopener noreferrer">
+                            <Github className="w-3 h-3 mr-1" />
+                            Code
+                          </a>
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 </motion.div>
