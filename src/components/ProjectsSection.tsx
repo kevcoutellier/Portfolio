@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Github, Brain, Search, Code, ExternalLink } from 'lucide-react';
+import { Github, Brain, Search, Code, ExternalLink, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -25,7 +25,7 @@ const projects = [
     tags: ['Python', 'AI/ML', 'Trading', 'Chart Analysis', 'Technical Analysis'],
     demo: 'https://trading-chart-analyzer-seven.vercel.app',
     code: 'https://github.com/kevcoutellier/Trading-chart-analyzer',
-    featured: true,
+    featured: false,
     icon: Search,
     stats: { ai: 'AI Analysis', markets: 'Multi-Market' }
   },
@@ -80,6 +80,19 @@ const projects = [
     featured: false,
     icon: Code,
     stats: { components: '15+', features: 'Advanced UI' }
+  },
+  {
+    id: 6,
+    title: 'CRYPTO VIZ',
+    category: 'Finance & Trading',
+    description: 'Plateforme d\'analytics crypto en temps réel avec architecture microservices. Analyse de sentiment IA, ML predictions avec Spark, et dashboard Vue 3 interactif.',
+    image: getProjectImage('crypto-viz.png'),
+    tags: ['Vue 3', 'FastAPI', 'Apache Kafka', 'Spark ML', 'DuckDB', 'Docker'],
+    demo: 'http://84.235.229.76:3000',
+    code: 'https://github.com/CRYPTO-VIZ-NCE10/CRYPTO_VIZ',
+    featured: true,
+    icon: TrendingUp,
+    stats: { services: '14+ Microservices', realtime: 'Temps Réel' }
   }
 ];
 
@@ -135,7 +148,7 @@ export function ProjectsSection() {
             </h3>
             
             <div className="grid lg:grid-cols-2 gap-8">
-              {featuredProjects.slice(0, 2).map((project, index) => (
+              {featuredProjects.slice(0, 3).map((project, index) => (
                 <motion.div
                   key={project.id}
                   initial={{ opacity: 0, y: 20 }}
