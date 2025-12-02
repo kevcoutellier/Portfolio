@@ -32,6 +32,7 @@ export default function RootLayout({
     <html lang="fr" suppressHydrationWarning>
       <body
         className="antialiased"
+        suppressHydrationWarning
       >
         <ThemeProvider
           attribute="class"
